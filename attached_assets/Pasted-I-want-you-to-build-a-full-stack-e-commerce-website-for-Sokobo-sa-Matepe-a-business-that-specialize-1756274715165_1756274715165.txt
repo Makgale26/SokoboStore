@@ -1,0 +1,22 @@
+I want you to build a full-stack e-commerce website for Sokobo sa Matepe, a business that specializes in graphic design, printing, and branded merchandise sales. The site must include a React frontend, a Node.js + Express backend, and a MongoDB database. Authentication should be handled with JWT tokens. I will provide the MongoDB connection string inside a .env file.
+
+On the frontend, the website must have several key pages. The homepage should feature a hero banner with Sokobo’s brand slogan, a section for featured products with pictures, and call-to-action buttons. There must be an About page explaining the company’s story, mission, and vision, as well as a Services page that outlines offerings such as printing, custom branding, and graphic design. The shop page must display products grouped by categories: T-shirts, Hoodies, and Hats. Each product must show an image, price, and short description. A detailed product page should allow users to view multiple product images, see the description, select sizes, check stock availability, and add the item to their cart. Customers should also have a Cart page to review their items and a Checkout page to enter shipping details, select payment, and confirm orders.
+
+The site must also include a Portfolio page that displays Sokobo sa Matepe’s past design and print work with images, and a Contact page with a contact form, WhatsApp integration, and social media links. The UI must be modern, mobile-friendly, and inspired by streetwear fashion style. Product pages must include multiple images with a carousel.
+
+On the backend, the Express server must expose REST API routes. User authentication routes include /auth/register and /auth/login, secured with JWT tokens. Product routes include fetching all products, fetching one product, and admin-only routes to create, update, and delete products with images. Orders should be handled with routes for placing an order, viewing a user’s orders, and for admins to view and update all orders. Portfolio routes must allow fetching all items, while admins should be able to upload and delete portfolio images. User routes for admins should include viewing all users, promoting/demoting roles, and deleting accounts. The backend must support image uploads using Multer (or an external service like Cloudinary).
+
+In the database, MongoDB must include four collections: Users, Products, Orders, and Portfolio. Users should store name, email, password hash, role, and createdAt. Products must store name, category, description, available sizes, price, stock, and an array of images. Orders must store the user ID, the items with their product IDs, quantities, images, and prices, plus the total, status, and createdAt. Portfolio items must store title, description, and one or more images.
+
+There must be a dedicated Admin Dashboard at /admin. Admins must be able to manage products (add, edit, delete with images), view and update orders, upload and remove portfolio images, and manage users (including role assignments). Analytics such as total sales, number of products, orders, and customers should be displayed in simple dashboard charts.
+
+The project must be scaffolded into a structure with a client folder for React and a server folder for Node.js. The client should contain components, pages, and services. The server should include models, routes, controllers, and middleware. An .env file must be used to store sensitive values such as the MongoDB URI and JWT secret.
+
+The .env file must look like this:
+
+PORT=5000
+MONGO_URI=mongodb+srv://kmradingwna09:ilovecavani@cluster0.xwlxtyx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=WorldisnotEnough
+
+
+To ensure the shop does not start empty, create a seed data script (server/seed.js) that inserts example products with images and portfolio items. For products, add a Sokobo Classic T-shirt, Sokobo Street Hoodie, and Sokobo Signature Hat. Each product must include multiple image URLs, a description, price, stock, and available sizes. For example, the T-shirt might include two images (front and back), the hoodie two images, and the hat two images. The portfolio should also include at least two past design projects with images.
