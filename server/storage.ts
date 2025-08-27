@@ -36,7 +36,7 @@ export interface IStorage {
   createPortfolioItem(item: InsertPortfolio): Promise<Portfolio>;
   deletePortfolioItem(id: string): Promise<boolean>;
 
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
 }
 
 export class MemStorage implements IStorage {
@@ -44,7 +44,7 @@ export class MemStorage implements IStorage {
   private products: Map<string, Product>;
   private orders: Map<string, Order>;
   private portfolio: Map<string, Portfolio>;
-  public sessionStore: session.SessionStore;
+  public sessionStore: session.Store;
 
   constructor() {
     this.users = new Map();
@@ -70,6 +70,7 @@ export class MemStorage implements IStorage {
     const user: User = { 
       ...insertUser, 
       id, 
+      role: insertUser.role || "customer",
       createdAt: new Date() 
     };
     this.users.set(id, user);
@@ -115,7 +116,11 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const product: Product = { 
       ...insertProduct, 
-      id, 
+      id,
+      sizes: Array.isArray(insertProduct.sizes) ? insertProduct.sizes : [],
+      images: Array.isArray(insertProduct.images) ? insertProduct.images : [],
+      stock: insertProduct.stock || 0,
+      featured: insertProduct.featured || false,
       createdAt: new Date() 
     };
     this.products.set(id, product);
@@ -125,7 +130,12 @@ export class MemStorage implements IStorage {
   async updateProduct(id: string, updates: Partial<InsertProduct>): Promise<Product | undefined> {
     const product = this.products.get(id);
     if (product) {
-      const updated = { ...product, ...updates };
+      const updated = { 
+        ...product, 
+        ...updates,
+        sizes: Array.isArray(updates.sizes) ? updates.sizes : product.sizes,
+        images: Array.isArray(updates.images) ? updates.images : product.images
+      };
       this.products.set(id, updated);
       return updated;
     }
@@ -153,7 +163,9 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const order: Order = { 
       ...insertOrder, 
-      id, 
+      id,
+      status: insertOrder.status || "pending",
+      items: Array.isArray(insertOrder.items) ? insertOrder.items : [],
       createdAt: new Date() 
     };
     this.orders.set(id, order);
@@ -183,7 +195,8 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const item: Portfolio = { 
       ...insertItem, 
-      id, 
+      id,
+      images: Array.isArray(insertItem.images) ? insertItem.images : [], 
       createdAt: new Date() 
     };
     this.portfolio.set(id, item);

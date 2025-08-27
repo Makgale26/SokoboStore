@@ -98,7 +98,7 @@ export default function CheckoutPage() {
   // Redirect if cart is empty and order not complete
   if (cartState.items.length === 0 && !orderComplete) {
     setLocation("/cart");
-    return null;
+    return <div>Redirecting to cart...</div>;
   }
 
   if (orderComplete) {

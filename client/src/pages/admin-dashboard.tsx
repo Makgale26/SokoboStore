@@ -74,11 +74,16 @@ export default function AdminDashboard() {
   // Redirect if not admin
   if (user?.role !== "admin") {
     setLocation("/");
-    return null;
+    return <div>Redirecting...</div>;
   }
 
   // Queries
-  const { data: analytics, isLoading: analyticsLoading } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading } = useQuery<{
+    totalSales: string;
+    totalProducts: number;
+    totalOrders: number;
+    totalCustomers: number;
+  }>({
     queryKey: ["/api/analytics"],
   });
 
