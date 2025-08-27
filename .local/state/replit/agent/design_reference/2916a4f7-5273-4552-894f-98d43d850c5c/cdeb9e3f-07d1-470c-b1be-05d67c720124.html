@@ -1,0 +1,1031 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sokobo sa Matepe - Streetwear & Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                    display: ["Space Grotesk", "system-ui", "sans-serif"],
+                }
+            },
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --background: 10 10 10;
+            --foreground: 255 255 255;
+            --card: 26 26 26;
+            --card-foreground: 255 255 255;
+            --primary: 0 212 255;
+            --primary-foreground: 10 10 10;
+            --secondary: 51 51 51;
+            --secondary-foreground: 255 255 255;
+            --muted: 85 85 85;
+            --muted-foreground: 170 170 170;
+            --accent: 0 255 136;
+            --accent-foreground: 10 10 10;
+            --destructive: 255 51 102;
+            --destructive-foreground: 255 255 255;
+            --border: 51 51 51;
+            --ring: 0 212 255;
+            --radius: 0.75rem;
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        .gradient-text {
+            background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .cart-icon::after {
+            content: attr(data-count);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-background text-foreground font-sans">
+    <!-- Navigation -->
+    <!-- @COMPONENT: Navigation [responsive nav with cart, auth] -->
+    <nav class="fixed top-0 w-full bg-background/90 backdrop-blur-md border-b border-border z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl font-display font-bold gradient-text">SOKOBO</h1>
+                    <span class="text-xs text-muted-foreground ml-1">SA MATEPE</span>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#" class="text-foreground hover:text-primary transition-colors font-medium">Home</a>
+                        <a href="#shop" class="text-muted-foreground hover:text-primary transition-colors">Shop</a>
+                        <a href="#portfolio" class="text-muted-foreground hover:text-primary transition-colors">Portfolio</a>
+                        <a href="#services" class="text-muted-foreground hover:text-primary transition-colors">Services</a>
+                        <a href="#about" class="text-muted-foreground hover:text-primary transition-colors">About</a>
+                        <a href="#contact" class="text-muted-foreground hover:text-primary transition-colors">Contact</a>
+                    </div>
+                </div>
+                
+                <!-- User Actions -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button class="text-muted-foreground hover:text-primary transition-colors" data-bind="user.isAuthenticated ? 'Account' : 'Login'">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="relative text-muted-foreground hover:text-primary transition-colors cart-icon" data-count="0" data-implementation="Cart count should update from cart state">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button class="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                        Get Quote
+                    </button>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button class="mobile-menu-toggle text-foreground hover:text-primary transition-colors">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div class="mobile-menu fixed top-16 right-0 h-screen w-64 bg-card border-l border-border md:hidden">
+            <div class="p-6 space-y-6">
+                <a href="#" class="block text-foreground font-medium">Home</a>
+                <a href="#shop" class="block text-muted-foreground hover:text-primary transition-colors">Shop</a>
+                <a href="#portfolio" class="block text-muted-foreground hover:text-primary transition-colors">Portfolio</a>
+                <a href="#services" class="block text-muted-foreground hover:text-primary transition-colors">Services</a>
+                <a href="#about" class="block text-muted-foreground hover:text-primary transition-colors">About</a>
+                <a href="#contact" class="block text-muted-foreground hover:text-primary transition-colors">Contact</a>
+                <div class="pt-4 border-t border-border space-y-4">
+                    <button class="w-full text-left text-muted-foreground hover:text-primary transition-colors">
+                        <i class="fas fa-user mr-2"></i> Account
+                    </button>
+                    <button class="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium">
+                        Get Quote
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+
+    <!-- Hero Section -->
+    <!-- @COMPONENT: HeroSection [full-screen banner with CTA] -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- A modern urban street art mural with vibrant colors and graffiti style -->
+        <div class="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent z-10"></div>
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080');"></div>
+        
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-7xl font-display font-bold mb-6 leading-tight">
+                <span class="gradient-text">DESIGN.</span><br>
+                <span class="text-foreground">PRINT.</span><br>
+                <span class="gradient-text">ELEVATE.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto font-light">
+                Where streetwear meets exceptional design. Custom graphics, premium printing, and branded merchandise that tells your story.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/90 transition-all transform hover:scale-105">
+                    Shop Collection
+                </button>
+                <button class="border border-border text-foreground px-8 py-4 rounded-lg font-semibold text-lg hover:bg-card transition-all">
+                    View Portfolio
+                </button>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-muted-foreground animate-bounce">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: HeroSection -->
+
+    <!-- Featured Products Section -->
+    <!-- @COMPONENT: FeaturedProducts [product showcase with carousel] -->
+    <section id="featured" class="py-20 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-display font-bold mb-4">
+                    Featured <span class="gradient-text">Drops</span>
+                </h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    Fresh designs, premium quality. Limited edition pieces that make a statement.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- @MAP: featuredProducts.map(product => ( -->
+                
+                <!-- Product Card 1 -->
+                <div class="glass-card rounded-lg overflow-hidden hover-lift group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- A stylish black streetwear t-shirt with modern graphic design on a model -->
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800" alt="Sokobo Classic T-Shirt" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute top-4 left-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold">
+                            NEW
+                        </div>
+                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="bg-foreground/20 backdrop-blur-sm text-foreground p-2 rounded-full hover:bg-foreground/30 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-display font-semibold mb-2" data-bind="product.name">Sokobo Classic Tee</h3>
+                        <p class="text-muted-foreground mb-4" data-bind="product.description">Premium cotton streetwear with signature graphics</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-primary" data-bind="product.price">R350</span>
+                            <button class="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Card 2 -->
+                <div class="glass-card rounded-lg overflow-hidden hover-lift group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- A trendy streetwear hoodie in dark color with urban design elements -->
+                        <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800" alt="Sokobo Street Hoodie" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="bg-foreground/20 backdrop-blur-sm text-foreground p-2 rounded-full hover:bg-foreground/30 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-display font-semibold mb-2" data-bind="product.name">Street Hoodie</h3>
+                        <p class="text-muted-foreground mb-4" data-bind="product.description">Oversized fit with bold graphics and premium comfort</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-primary" data-bind="product.price">R650</span>
+                            <button class="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Card 3 -->
+                <div class="glass-card rounded-lg overflow-hidden hover-lift group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- A stylish streetwear cap/hat with modern branding and urban aesthetic -->
+                        <img src="https://images.unsplash.com/photo-1588850561407-ed78c282e89b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=800" alt="Sokobo Signature Hat" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute top-4 left-4 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-semibold">
+                            LIMITED
+                        </div>
+                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="bg-foreground/20 backdrop-blur-sm text-foreground p-2 rounded-full hover:bg-foreground/30 transition-colors">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-display font-semibold mb-2" data-bind="product.name">Signature Cap</h3>
+                        <p class="text-muted-foreground mb-4" data-bind="product.description">Embroidered logo with adjustable strap</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-primary" data-bind="product.price">R250</span>
+                            <button class="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- @END_MAP )) -->
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="border border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary hover:text-primary-foreground transition-colors">
+                    View All Products
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: FeaturedProducts -->
+
+    <!-- Shop Categories Section -->
+    <!-- @COMPONENT: ShopCategories [category navigation with previews] -->
+    <section id="shop" class="py-20 bg-card">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-display font-bold mb-4">
+                    Shop by <span class="gradient-text">Category</span>
+                </h2>
+                <p class="text-xl text-muted-foreground">
+                    Discover our full range of streetwear essentials
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- T-Shirts Category -->
+                <div class="group cursor-pointer" data-event="click:navigateToCategory" data-category="tshirts">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- A collection of colorful streetwear t-shirts arranged stylishly -->
+                        <img src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="T-Shirts Collection" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6">
+                            <h3 class="text-2xl font-display font-bold mb-2">T-Shirts</h3>
+                            <p class="text-muted-foreground">From R350</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hoodies Category -->
+                <div class="group cursor-pointer" data-event="click:navigateToCategory" data-category="hoodies">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- A display of premium hoodies in various colors hanging stylishly -->
+                        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Hoodies Collection" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6">
+                            <h3 class="text-2xl font-display font-bold mb-2">Hoodies</h3>
+                            <p class="text-muted-foreground">From R650</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hats Category -->
+                <div class="group cursor-pointer" data-event="click:navigateToCategory" data-category="hats">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- A stylish arrangement of streetwear caps and hats with different designs -->
+                        <img src="https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Hats Collection" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6">
+                            <h3 class="text-2xl font-display font-bold mb-2">Hats</h3>
+                            <p class="text-muted-foreground">From R250</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: ShopCategories -->
+
+    <!-- Portfolio Section -->
+    <!-- @COMPONENT: Portfolio [design work showcase] -->
+    <section id="portfolio" class="py-20 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-display font-bold mb-4">
+                    Our <span class="gradient-text">Work</span>
+                </h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    From concept to creation - explore our latest design projects and print work
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- @MAP: portfolioItems.map(item => ( -->
+                
+                <!-- Portfolio Item 1 -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- A creative logo design project with modern typography and vibrant colors -->
+                        <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Brand Identity Design" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <h3 class="text-xl font-display font-semibold mb-2" data-bind="portfolioItem.title">Brand Identity Design</h3>
+                                <p class="text-muted-foreground text-sm" data-bind="portfolioItem.description">Complete brand identity package for local business</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 2 -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- Custom t-shirt designs with artistic graphics and streetwear aesthetics -->
+                        <img src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Custom T-Shirt Designs" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <h3 class="text-xl font-display font-semibold mb-2" data-bind="portfolioItem.title">Custom Apparel</h3>
+                                <p class="text-muted-foreground text-sm" data-bind="portfolioItem.description">Unique designs for streetwear collection</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 3 -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- Professional business cards and stationery design with elegant typography -->
+                        <img src="https://pixabay.com/get/g0d06b33556d0abdbcec739f1435e9633083e240fcff5bf4cd1846b487b3f6c9bb79e495d8fa58d9f60e00ae8c3ef5d7ce5dccd0b030b7c30414853b5e0e130a6_1280.jpg" alt="Print Design Work" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <h3 class="text-xl font-display font-semibold mb-2" data-bind="portfolioItem.title">Print Design</h3>
+                                <p class="text-muted-foreground text-sm" data-bind="portfolioItem.description">Business cards and marketing materials</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 4 -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- Creative poster designs with bold graphics and modern layout -->
+                        <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Poster Design" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <h3 class="text-xl font-display font-semibold mb-2" data-bind="portfolioItem.title">Event Posters</h3>
+                                <p class="text-muted-foreground text-sm" data-bind="portfolioItem.description">Eye-catching promotional materials</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 5 -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- Digital artwork and illustrations with vibrant colors and modern style -->
+                        <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Digital Artwork" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <h3 class="text-xl font-display font-semibold mb-2" data-bind="portfolioItem.title">Digital Art</h3>
+                                <p class="text-muted-foreground text-sm" data-bind="portfolioItem.description">Original illustrations and artwork</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Item 6 -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="relative overflow-hidden rounded-lg">
+                        <!-- Web design mockups showing modern interface design on devices -->
+                        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Web Design" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" data-mock-image="true">
+                        <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <h3 class="text-xl font-display font-semibold mb-2" data-bind="portfolioItem.title">Web Design</h3>
+                                <p class="text-muted-foreground text-sm" data-bind="portfolioItem.description">Modern website and app interfaces</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- @END_MAP )) -->
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="bg-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+                    View Full Portfolio
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Portfolio -->
+
+    <!-- Services Section -->
+    <!-- @COMPONENT: Services [service offerings with icons] -->
+    <section id="services" class="py-20 bg-card">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-display font-bold mb-4">
+                    Our <span class="gradient-text">Services</span>
+                </h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    From concept to completion - we bring your vision to life
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Graphic Design Service -->
+                <div class="glass-card p-8 rounded-lg text-center hover-lift" data-mock="true">
+                    <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-palette text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-display font-semibold mb-4">Graphic Design</h3>
+                    <p class="text-muted-foreground mb-6">
+                        Logo design, brand identity, digital artwork, and creative solutions that make your brand stand out.
+                    </p>
+                    <ul class="text-sm text-muted-foreground space-y-2 mb-6">
+                        <li>• Logo & Brand Identity</li>
+                        <li>• Digital Illustrations</li>
+                        <li>• Marketing Materials</li>
+                        <li>• Social Media Graphics</li>
+                    </ul>
+                    <button class="border border-primary text-primary px-6 py-2 rounded-lg font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
+                        Get Quote
+                    </button>
+                </div>
+                
+                <!-- Printing Service -->
+                <div class="glass-card p-8 rounded-lg text-center hover-lift" data-mock="true">
+                    <div class="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-print text-accent text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-display font-semibold mb-4">Premium Printing</h3>
+                    <p class="text-muted-foreground mb-6">
+                        High-quality printing services for all your business and personal needs with fast turnaround times.
+                    </p>
+                    <ul class="text-sm text-muted-foreground space-y-2 mb-6">
+                        <li>• Business Cards & Stationery</li>
+                        <li>• Posters & Banners</li>
+                        <li>• Apparel Printing</li>
+                        <li>• Promotional Materials</li>
+                    </ul>
+                    <button class="border border-accent text-accent px-6 py-2 rounded-lg font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
+                        Get Quote
+                    </button>
+                </div>
+                
+                <!-- Custom Branding Service -->
+                <div class="glass-card p-8 rounded-lg text-center hover-lift" data-mock="true">
+                    <div class="w-16 h-16 bg-destructive/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-star text-destructive text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-display font-semibold mb-4">Custom Branding</h3>
+                    <p class="text-muted-foreground mb-6">
+                        Complete branding solutions including merchandise, packaging, and brand strategy development.
+                    </p>
+                    <ul class="text-sm text-muted-foreground space-y-2 mb-6">
+                        <li>• Brand Strategy</li>
+                        <li>• Custom Merchandise</li>
+                        <li>• Packaging Design</li>
+                        <li>• Brand Guidelines</li>
+                    </ul>
+                    <button class="border border-destructive text-destructive px-6 py-2 rounded-lg font-medium hover:bg-destructive hover:text-destructive-foreground transition-colors">
+                        Get Quote
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Services -->
+
+    <!-- About Section -->
+    <!-- @COMPONENT: About [company story and mission] -->
+    <section id="about" class="py-20 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">
+                        About <span class="gradient-text">Sokobo sa Matepe</span>
+                    </h2>
+                    <p class="text-lg text-muted-foreground mb-6">
+                        Born from the streets, elevated by design. Sokobo sa Matepe is more than a brand - it's a movement that celebrates authentic expression through innovative design and premium streetwear.
+                    </p>
+                    <p class="text-muted-foreground mb-8">
+                        Founded with a mission to bridge the gap between raw creativity and refined aesthetics, we specialize in graphic design, premium printing, and custom merchandise that tells your story. Every piece we create carries the spirit of the streets with the quality of luxury.
+                    </p>
+                    
+                    <!-- Mission & Vision -->
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-display font-semibold mb-2 text-primary">Our Mission</h3>
+                            <p class="text-muted-foreground">
+                                To empower individuals and brands through exceptional design and quality craftsmanship that resonates with street culture and contemporary aesthetics.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-semibold mb-2 text-accent">Our Vision</h3>
+                            <p class="text-muted-foreground">
+                                To become the leading creative force in streetwear and design, setting new standards for authenticity and innovation in the industry.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <!-- A creative workspace with design tools, printed materials, and streetwear items -->
+                    <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" alt="Creative workspace showing design process" class="rounded-lg shadow-2xl" data-mock-image="true">
+                    <div class="absolute -bottom-6 -left-6 glass-card p-6 rounded-lg">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-1">5+</div>
+                            <div class="text-sm text-muted-foreground">Years Experience</div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-6 -right-6 glass-card p-6 rounded-lg">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-accent mb-1">500+</div>
+                            <div class="text-sm text-muted-foreground">Happy Clients</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: About -->
+
+    <!-- Contact Section -->
+    <!-- @COMPONENT: Contact [contact form and info] -->
+    <section id="contact" class="py-20 bg-card">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-display font-bold mb-4">
+                    Get In <span class="gradient-text">Touch</span>
+                </h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    Ready to elevate your brand? Let's discuss your next project.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Information -->
+                <div>
+                    <h3 class="text-2xl font-display font-semibold mb-8">Let's Start a Conversation</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fab fa-whatsapp text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">WhatsApp</h4>
+                                <p class="text-muted-foreground">Chat with us instantly for quick quotes and support</p>
+                                <a href="https://wa.me/27123456789" class="text-primary hover:text-primary/80 transition-colors inline-flex items-center mt-2" data-implementation="Replace with actual WhatsApp number">
+                                    <span>+27 12 345 6789</span>
+                                    <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-accent text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Email</h4>
+                                <p class="text-muted-foreground">Send us detailed project requirements</p>
+                                <a href="mailto:info@sokobosamatepe.co.za" class="text-accent hover:text-accent/80 transition-colors mt-2 block" data-mock="true">
+                                    info@sokobosamatepe.co.za
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-destructive/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-destructive text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Location</h4>
+                                <p class="text-muted-foreground">Johannesburg, South Africa</p>
+                                <p class="text-muted-foreground text-sm mt-1" data-mock="true">Available for in-person consultations</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Media Links -->
+                    <div class="mt-12">
+                        <h4 class="font-semibold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center hover:bg-primary transition-colors" data-implementation="Link to actual Instagram">
+                                <i class="fab fa-instagram text-foreground"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center hover:bg-primary transition-colors" data-implementation="Link to actual Facebook">
+                                <i class="fab fa-facebook text-foreground"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center hover:bg-primary transition-colors" data-implementation="Link to actual Twitter">
+                                <i class="fab fa-twitter text-foreground"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 bg-secondary rounded-full flex items-center justify-center hover:bg-primary transition-colors" data-implementation="Link to actual LinkedIn">
+                                <i class="fab fa-linkedin text-foreground"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div class="glass-card p-8 rounded-lg">
+                    <form class="space-y-6" data-implementation="Handle form submission with validation">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium mb-2">First Name</label>
+                                <input 
+                                    type="text" 
+                                    id="firstName" 
+                                    name="firstName"
+                                    class="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                                    placeholder="John"
+                                    data-mock="true"
+                                >
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium mb-2">Last Name</label>
+                                <input 
+                                    type="text" 
+                                    id="lastName" 
+                                    name="lastName"
+                                    class="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                                    placeholder="Doe"
+                                    data-mock="true"
+                                >
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email"
+                                class="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                                placeholder="john@example.com"
+                                data-mock="true"
+                            >
+                        </div>
+                        
+                        <div>
+                            <label for="service" class="block text-sm font-medium mb-2">Service Interested In</label>
+                            <select 
+                                id="service" 
+                                name="service"
+                                class="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                                data-mock="true"
+                            >
+                                <option value="">Select a service</option>
+                                <option value="graphic-design">Graphic Design</option>
+                                <option value="printing">Printing Services</option>
+                                <option value="custom-branding">Custom Branding</option>
+                                <option value="merchandise">Custom Merchandise</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium mb-2">Project Details</label>
+                            <textarea 
+                                id="message" 
+                                name="message"
+                                rows="4"
+                                class="w-full px-4 py-3 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-none"
+                                placeholder="Tell us about your project..."
+                                data-mock="true"
+                            ></textarea>
+                        </div>
+                        
+                        <button 
+                            type="submit" 
+                            class="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                            data-event="click:handleFormSubmit"
+                        >
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Contact -->
+
+    <!-- Admin Dashboard Preview (Hidden by default) -->
+    <!-- @COMPONENT: AdminDashboard [admin management interface] -->
+    <section id="admin" class="py-20 bg-background hidden" data-implementation="Show only for admin users">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-display font-bold mb-4">Admin Dashboard</h2>
+                <p class="text-muted-foreground">Manage products, orders, and portfolio items</p>
+            </div>
+            
+            <!-- Dashboard Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <div class="glass-card p-6 rounded-lg" data-mock="true">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-muted-foreground text-sm">Total Sales</p>
+                            <p class="text-2xl font-bold text-accent" data-bind="stats.totalSales">R 15,240</p>
+                        </div>
+                        <i class="fas fa-chart-line text-accent text-2xl"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 rounded-lg" data-mock="true">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-muted-foreground text-sm">Products</p>
+                            <p class="text-2xl font-bold text-primary" data-bind="stats.totalProducts">24</p>
+                        </div>
+                        <i class="fas fa-box text-primary text-2xl"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 rounded-lg" data-mock="true">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-muted-foreground text-sm">Orders</p>
+                            <p class="text-2xl font-bold text-destructive" data-bind="stats.totalOrders">18</p>
+                        </div>
+                        <i class="fas fa-shopping-cart text-destructive text-2xl"></i>
+                    </div>
+                </div>
+                
+                <div class="glass-card p-6 rounded-lg" data-mock="true">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-muted-foreground text-sm">Customers</p>
+                            <p class="text-2xl font-bold text-foreground" data-bind="stats.totalCustomers">127</p>
+                        </div>
+                        <i class="fas fa-users text-foreground text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="flex flex-wrap gap-4 mb-8">
+                <button class="bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Product
+                </button>
+                <button class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-medium hover:bg-accent/90 transition-colors">
+                    <i class="fas fa-upload mr-2"></i>Upload Portfolio
+                </button>
+                <button class="bg-secondary text-secondary-foreground px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 transition-colors">
+                    <i class="fas fa-list mr-2"></i>View Orders
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: AdminDashboard -->
+
+    <!-- Footer -->
+    <!-- @COMPONENT: Footer [site links and info] -->
+    <footer class="bg-card border-t border-border py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Brand -->
+                <div>
+                    <h3 class="text-2xl font-display font-bold gradient-text mb-4">SOKOBO</h3>
+                    <p class="text-muted-foreground mb-4">
+                        Elevating streetwear through exceptional design and premium quality.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-muted-foreground hover:text-primary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-muted-foreground hover:text-primary transition-colors">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-muted-foreground hover:text-primary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-muted-foreground hover:text-primary transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-muted-foreground hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#shop" class="text-muted-foreground hover:text-primary transition-colors">Shop</a></li>
+                        <li><a href="#portfolio" class="text-muted-foreground hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="#about" class="text-muted-foreground hover:text-primary transition-colors">About</a></li>
+                        <li><a href="#contact" class="text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-muted-foreground hover:text-primary transition-colors">Graphic Design</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:text-primary transition-colors">Printing</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:text-primary transition-colors">Custom Branding</a></li>
+                        <li><a href="#" class="text-muted-foreground hover:text-primary transition-colors">Merchandise</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="font-semibold mb-4">Stay Updated</h4>
+                    <p class="text-muted-foreground text-sm mb-4">
+                        Subscribe to get notified about new drops and exclusive offers.
+                    </p>
+                    <div class="flex">
+                        <input 
+                            type="email" 
+                            placeholder="Your email"
+                            class="flex-1 px-3 py-2 bg-background border border-border rounded-l-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            data-mock="true"
+                        >
+                        <button class="bg-primary text-primary-foreground px-4 py-2 rounded-r-lg hover:bg-primary/90 transition-colors">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-border mt-8 pt-8 text-center">
+                <p class="text-muted-foreground text-sm">
+                    © 2024 Sokobo sa Matepe. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- Shopping Cart Sidebar (Hidden by default) -->
+    <!-- @COMPONENT: CartSidebar [shopping cart overlay] -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-screen w-96 bg-card border-l border-border transform translate-x-full transition-transform duration-300 z-50 hidden" data-implementation="Show/hide based on cart state">
+        <div class="p-6 border-b border-border">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-display font-semibold">Shopping Cart</h3>
+                <button class="cart-close text-muted-foreground hover:text-foreground">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto p-6">
+            <!-- Cart items would go here -->
+            <div class="text-center text-muted-foreground py-8" data-mock="true">
+                <i class="fas fa-shopping-cart text-4xl mb-4"></i>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        
+        <div class="p-6 border-t border-border">
+            <div class="flex justify-between items-center mb-4">
+                <span class="font-semibold">Total:</span>
+                <span class="text-xl font-bold text-primary" data-bind="cart.total">R 0</span>
+            </div>
+            <button class="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors" disabled>
+                Checkout
+            </button>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: CartSidebar -->
+
+    <script>
+        (function() {
+            // Mobile menu toggle
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            if (mobileMenuToggle && mobileMenu) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('active');
+                });
+            }
+            
+            // Cart functionality placeholder
+            const cartIcon = document.querySelector('.cart-icon');
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartClose = document.querySelector('.cart-close');
+            
+            if (cartIcon && cartSidebar) {
+                cartIcon.addEventListener('click', function() {
+                    cartSidebar.classList.remove('hidden');
+                    cartSidebar.classList.remove('translate-x-full');
+                });
+            }
+            
+            if (cartClose && cartSidebar) {
+                cartClose.addEventListener('click', function() {
+                    cartSidebar.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        cartSidebar.classList.add('hidden');
+                    }, 300);
+                });
+            }
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Form submission placeholder
+            const contactForm = document.querySelector('form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // TODO: Implement form submission logic
+                    console.log('Form submitted - implement backend integration');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
